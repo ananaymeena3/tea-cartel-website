@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tea Cartel — Sip. Chill. Repeat.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────
+       TOKEN SYSTEM
+    ────────────────────────────────────────── */
+    :root {
+      --ink:        #1A1209;
+      --cream:      #FAF6EE;
+      --amber:      #C8873A;
+      --amber-light:#E8A85A;
+      --sage:       #5C6B52;
+      --warm-white: #FFF9F1;
+      --muted:      #7A6B55;
+      --card-bg:    #FFF4E6;
+      --border:     #E8DDD0;
+
+      --ff-display: 'Playfair Display', Georgia, serif;
+      --ff-serif:   'DM Serif Display', Georgia, serif;
+      --ff-body:    'DM Sans', system-ui, sans-serif;
+
+      --max-w: 1120px;
+      --section-pad: clamp(64px, 10vw, 120px);
+      --radius: 16px;
+      --radius-sm: 8px;
+    }
+
+    /* ─────────────────────────────────────────
+       RESET & BASE
+    ────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--ff-body);
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ─────────────────────────────────────────
+       UTILITY
+    ────────────────────────────────────────── */
+    .container { max-width: var(--max-w); margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+    .section { padding: var(--section-pad) 0; }
+    .section--dark { background: var(--ink); color: var(--cream); }
+    .section--amber { background: var(--amber); color: var(--warm-white); }
+    .section--card { background: var(--card-bg); }
+
+    .eyebrow {
+      font-family: var(--ff-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .section--dark .eyebrow { color: var(--amber-light); }
+
+    .heading-xl {
+      font-family: var(--ff-display);
+      font-size: clamp(42px, 8vw, 88px);
+      font-weight: 900;
+      line-height: 1.03;
+      letter-spacing: -0.02em;
+    }
+    .heading-lg {
+      font-family: var(--ff-display);
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .heading-md {
+      font-family: var(--ff-serif);
+      font-size: clamp(22px, 3.5vw, 34px);
+      line-height: 1.2;
+    }
+
+    .body-lg { font-size: clamp(16px, 2vw, 19px); line-height: 1.75; color: var(--muted); }
+    .body-lg--light { color: rgba(250,246,238,0.75); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-family: var(--ff-body);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      border: none;
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .btn:active { transform: translateY(0); }
+    .btn--primary { background: var(--amber); color: #fff; }
+    .btn--outline { background: transparent; border: 1.5px solid var(--ink); color: var(--ink); }
+    .btn--outline-light { background: transparent; border: 1.5px solid rgba(255,255,255,0.5); color: #fff; }
+    .btn--ghost { background: rgba(255,255,255,0.12); color: #fff; border: 1.5px solid rgba(255,255,255,0.2); }
+
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: var(--amber);
+      border: none;
+      margin: 24px 0;
+    }
+
+    /* ─────────────────────────────────────────
+       NAV
+    ────────────────────────────────────────── */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 18px clamp(20px, 5vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(250,246,238,0.96);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .nav-logo {
+      font-family: var(--ff-display);
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--warm-white);
+      letter-spacing: -0.01em;
+      transition: color 0.3s;
+    }
+    .nav.scrolled .nav-logo { color: var(--ink); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      transition: color 0.2s;
+    }
+    .nav.scrolled .nav-links a { color: var(--muted); }
+    .nav-links a:hover { color: var(--amber); }
+    .nav-cta {
+      padding: 10px 22px;
+      font-size: 13px;
+      background: var(--amber);
+      color: #fff !important;
+      border-radius: 100px;
+    }
+    .nav-cta:hover { opacity: 0.9; color: #fff !important; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #fff;
+      margin: 5px 0;
+      transition: background 0.3s;
+    }
+    .nav.scrolled .nav-toggle span { background: var(--ink); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+    }
+
+    /* ─────────────────────────────────────────
+       HERO
+    ────────────────────────────────────────── */
+    .hero {
+      min-height: 100svh;
+      background: linear-gradient(160deg, #1A1209 0%, #2C1A08 40%, #3D2510 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px clamp(20px,5vw,48px) 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 80%, rgba(200,135,58,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 20%, rgba(200,135,58,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* Decorative steam rings */
+    .hero-steam {
+      position: absolute;
+      top: 15%;
+      right: 12%;
+      width: 120px;
+      height: 120px;
+      opacity: 0.06;
+      border-radius: 50%;
+      border: 2px solid var(--amber);
+      animation: steamRing 6s ease-in-out infinite;
+    }
+    .hero-steam:nth-child(2) {
+      width: 80px; height: 80px;
+      top: 20%; right: 18%;
+      animation-delay: 2s;
+    }
+    .hero-steam:nth-child(3) {
+      width: 50px; height: 50px;
+      top: 25%; right: 14%;
+      animation-delay: 4s;
+    }
+    @keyframes steamRing {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.06; }
+      50% { transform: translateY(-20px) scale(1.1); opacity: 0.1; }
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--amber-light);
+      font-weight: 500;
+      margin-bottom: 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--amber-light);
+      opacity: 0.5;
+    }
+    .hero h1 {
+      font-family: var(--ff-display);
+      font-size: clamp(52px, 10vw, 108px);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--warm-white);
+      margin-bottom: 12px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--amber-light);
+    }
+    .hero-tagline {
+      font-family: var(--ff-serif);
+      font-size: clamp(18px, 3vw, 26px);
+      color: rgba(255,249,241,0.6);
+      font-style: italic;
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+    }
+    .hero-desc {
+      max-width: 520px;
+      font-size: clamp(15px, 2vw, 17px);
+      color: rgba(255,249,241,0.65);
+      line-height: 1.75;
+      margin: 0 auto 40px;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.3);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(200,135,58,0.6), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.6); opacity: 0.5; }
+    }
+
+    /* ─────────────────────────────────────────
+       TRUST BAR
+    ────────────────────────────────────────── */
+    .trust-bar {
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+    .trust-bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .trust-icon { font-size: 18px; }
+
+    /* ─────────────────────────────────────────
+       ABOUT
+    ────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: center;
+    }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+
+    .about-visual {
+      position: relative;
+    }
+    .about-img-frame {
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      background: linear-gradient(135deg, #2C1A08 0%, #3D2510 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .about-img-placeholder {
+      text-align: center;
+      color: rgba(200,135,58,0.4);
+      padding: 40px;
+    }
+    .about-img-placeholder .big-icon { font-size: 80px; margin-bottom: 16px; }
+    .about-img-placeholder p { font-size: 13px; color: rgba(200,135,58,0.3); }
+
+    .about-badge {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 110px;
+      height: 110px;
+      background: var(--amber);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(200,135,58,0.35);
+    }
+    .about-badge .num { font-family: var(--ff-display); font-size: 28px; font-weight: 900; color: #fff; line-height: 1; }
+    .about-badge .lbl { font-size: 10px; color: rgba(255,255,255,0.8); text-align: center; line-height: 1.3; margin-top: 4px; }
+
+    .about-features { margin-top: 36px; display: flex; flex-direction: column; gap: 20px; }
+    .feature-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .feature-text h4 { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+    .feature-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    /* ─────────────────────────────────────────
+       MENU
+    ────────────────────────────────────────── */
+    .menu-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 10px 22px;
+      border-radius: 100px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      font-family: var(--ff-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .menu-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(26,18,9,0.08);
+    }
+    .menu-card-icon { font-size: 36px; margin-bottom: 16px; }
+    .menu-card-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      background: rgba(200,135,58,0.1);
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-bottom: 10px;
+    }
+    .menu-card h3 {
+      font-family: var(--ff-serif);
+      font-size: 22px;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .menu-card p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+    .menu-card-price {
+      font-family: var(--ff-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .menu-card-price span { font-size: 13px; font-weight: 400; color: var(--muted); }
+    .menu-card--featured {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+    .menu-card--featured h3,
+    .menu-card--featured .menu-card-price { color: var(--warm-white); }
+    .menu-card--featured p { color: rgba(250,246,238,0.6); }
+    .menu-card--featured .menu-card-tag { background: rgba(200,135,58,0.2); }
+    .star-badge {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--amber);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    /* Full menu teaser */
+    .menu-cta-bar {
+      margin-top: 48px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .menu-cta-bar p { font-size: 17px; font-weight: 500; }
+    .menu-cta-bar small { color: var(--muted); font-size: 13px; display: block; margin-top: 4px; }
+
+    /* ─────────────────────────────────────────
+       GALLERY
+    ────────────────────────────────────────── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 16px;
+    }
+    .gallery-cell {
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: linear-gradient(135deg, #2C1A08 0%, #3D2510 100%);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-cell:nth-child(1) { grid-column: span 7; aspect-ratio: 16/10; }
+    .gallery-cell:nth-child(2) { grid-column: span 5; aspect-ratio: 4/5; }
+    .gallery-cell:nth-child(3) { grid-column: span 4; aspect-ratio: 4/5; }
+    .gallery-cell:nth-child(4) { grid-column: span 4; aspect-ratio: 4/5; }
+    .gallery-cell:nth-child(5) { grid-column: span 4; aspect-ratio: 4/5; }
+    @media (max-width: 768px) {
+      .gallery-cell { grid-column: span 12 !important; aspect-ratio: 4/3 !important; }
+    }
+
+    .gallery-placeholder {
+      text-align: center;
+      padding: 24px;
+      color: rgba(200,135,58,0.35);
+    }
+    .gallery-placeholder .g-icon { font-size: 40px; margin-bottom: 10px; }
+    .gallery-placeholder p { font-size: 12px; line-height: 1.5; }
+
+    .gallery-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(26,18,9,0.85), transparent);
+      padding: 32px 20px 16px;
+      color: #fff;
+      font-size: 13px;
+      font-style: italic;
+      font-family: var(--ff-serif);
+    }
+
+    /* ─────────────────────────────────────────
+       REVIEWS
+    ────────────────────────────────────────── */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .review-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 32px;
+      transition: transform 0.2s;
+    }
+    .review-card:hover { transform: translateY(-4px); }
+    .review-stars { color: var(--amber-light); font-size: 16px; margin-bottom: 16px; letter-spacing: 2px; }
+    .review-text {
+      font-family: var(--ff-serif);
+      font-size: 17px;
+      line-height: 1.6;
+      color: rgba(250,246,238,0.9);
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .review-author { display: flex; align-items: center; gap: 12px; }
+    .review-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .review-name { font-size: 14px; font-weight: 600; color: var(--cream); }
+    .review-meta { font-size: 12px; color: rgba(250,246,238,0.45); margin-top: 2px; }
+
+    .rating-summary {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+    }
+    .big-rating {
+      font-family: var(--ff-display);
+      font-size: 72px;
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1;
+    }
+    .big-rating-sub { font-size: 13px; color: rgba(250,246,238,0.5); margin-top: 4px; }
+
+    /* ─────────────────────────────────────────
+       ORDER ONLINE
+    ────────────────────────────────────────── */
+    .order-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+    @media (max-width: 640px) { .order-cards { grid-template-columns: 1fr; } }
+
+    .order-card {
+      border-radius: 24px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      transition: transform 0.2s;
+    }
+    .order-card:hover { transform: translateY(-4px); }
+    .order-card--zomato { background: #CB202D; color: #fff; }
+    .order-card--swiggy { background: #FC8019; color: #fff; }
+    .order-card-logo { font-size: 36px; }
+    .order-card h3 { font-family: var(--ff-display); font-size: 28px; font-weight: 900; }
+    .order-card p { font-size: 14px; opacity: 0.8; line-height: 1.5; }
+    .order-card .btn { margin-top: 8px; background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+    .order-card .btn:hover { background: rgba(255,255,255,0.3); }
+
+    /* ─────────────────────────────────────────
+       VISIT
+    ────────────────────────────────────────── */
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: start;
+    }
+    @media (max-width: 768px) { .visit-grid { grid-template-columns: 1fr; } }
+
+    .map-frame {
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      border: 1px solid var(--border);
+    }
+    .map-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .info-blocks { display: flex; flex-direction: column; gap: 32px; }
+    .info-block h4 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 10px;
+    }
+    .info-block p, .info-block a {
+      font-size: 16px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .info-block a:hover { color: var(--amber); }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row .day { color: var(--muted); }
+    .hours-row .time { font-weight: 500; }
+    .open-now {
+      display: inline-block;
+      background: rgba(92,107,82,0.12);
+      color: var(--sage);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+      margin-bottom: 12px;
+    }
+
+    /* ─────────────────────────────────────────
+       INSTAGRAM
+    ────────────────────────────────────────── */
+    .insta-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 48px;
+    }
+    @media (max-width: 768px) { .insta-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { .insta-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .insta-cell {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2C1A08 0%, #3D2510 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .insta-cell:hover { transform: scale(0.97); }
+    .insta-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(200,135,58,0.0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .insta-cell:hover .insta-overlay { background: rgba(200,135,58,0.2); }
+    .insta-icon { font-size: 28px; color: rgba(200,135,58,0.3); }
+    .insta-cta-bar {
+      margin-top: 40px;
+      text-align: center;
+    }
+    .insta-handle {
+      font-family: var(--ff-serif);
+      font-size: 22px;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    /* ─────────────────────────────────────────
+       FAQ
+    ────────────────────────────────────────── */
+    .faq-list { max-width: 720px; margin: 48px auto 0; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 16px;
+      gap: 16px;
+      user-select: none;
+    }
+    .faq-q:hover { color: var(--amber); }
+    .faq-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--amber); border-color: var(--amber); color: #fff; }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding-bottom: 22px; }
+
+    /* ─────────────────────────────────────────
+       FOOTER
+    ────────────────────────────────────────── */
+    .footer {
+      background: var(--ink);
+      color: var(--cream);
+      padding: clamp(48px, 8vw, 80px) 0 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 56px;
+    }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; } }
+    @media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; } }
+
+    .footer-brand-name {
+      font-family: var(--ff-display);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--warm-white);
+      margin-bottom: 12px;
+    }
+    .footer-brand-tag {
+      font-family: var(--ff-serif);
+      font-style: italic;
+      color: rgba(250,246,238,0.4);
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+    .footer-brand-desc { font-size: 14px; color: rgba(250,246,238,0.5); line-height: 1.75; max-width: 260px; }
+
+    .footer-col h5 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(250,246,238,0.4);
+      margin-bottom: 16px;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: rgba(250,246,238,0.65); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--amber-light); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 12px;
+      color: rgba(250,246,238,0.3);
+    }
+
+    .social-links { display: flex; gap: 12px; }
+    .social-link {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      color: rgba(250,246,238,0.5);
+      transition: all 0.2s;
+    }
+    .social-link:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* ─────────────────────────────────────────
+       ANIMATIONS
+    ────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .hero-steam { animation: none; }
+      .hero-scroll-line { animation: none; }
+    }
+
+    /* ─────────────────────────────────────────
+       SECTION HEADER HELPER
+    ────────────────────────────────────────── */
+    .section-header { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+    .section-header .divider { margin: 16px auto; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">Tea Cartel</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#menu">Menu</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#visit">Find Us</a>
+    <a href="#order" class="nav-cta">Order Now</a>
+  </div>
+  <button class="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-steam"></div>
+  <div class="hero-steam"></div>
+  <div class="hero-steam"></div>
+
+  <div class="hero-eyebrow">
+    <span></span>
+    Jaipur's Favourite Hangout
+    <span></span>
+  </div>
+  <h1>Tea<br><em>Cartel</em></h1>
+  <p class="hero-tagline">Sip. Chill. Repeat.</p>
+  <p class="hero-desc">
+    A cozy café in Jaipur serving handcrafted teas, delicious bites,
+    and a space where great conversations come naturally.
+  </p>
+  <div class="hero-actions">
+    <a href="#menu" class="btn btn--primary">☕ View Menu</a>
+    <a href="https://www.zomato.com/jaipur/tea-cartel-jagatpura" target="_blank" rel="noopener" class="btn btn--ghost">🍽️ Order on Zomato</a>
+    <a href="https://www.swiggy.com/restaurants/1157814/dineout/menu" target="_blank" rel="noopener" class="btn btn--ghost">🛵 Order on Swiggy</a>
+    <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener" class="btn btn--outline-light">📸 Instagram</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TRUST BAR
+═══════════════════════════════════════════ -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-bar-inner">
+      <div class="trust-item"><span class="trust-icon">⭐</span> 4.5+ Rating on Zomato</div>
+      <div class="trust-item"><span class="trust-icon">🏡</span> Open-Air Ambience</div>
+      <div class="trust-item"><span class="trust-icon">🌿</span> Freshly Made Every Day</div>
+      <div class="trust-item"><span class="trust-icon">📍</span> Jagatpura, Jaipur</div>
+      <div class="trust-item"><span class="trust-icon">🕙</span> Open 10 AM – Midnight</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════ -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual reveal">
+        <div class="about-img-frame">
+          <div class="about-img-placeholder">
+            <div class="big-icon">☕</div>
+            <p>Replace with your best<br>café atmosphere photo</p>
+          </div>
+        </div>
+        <div class="about-badge">
+          <div class="num">✦</div>
+          <div class="lbl">Jaipur's Favourite</div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-1">
+        <span class="eyebrow">Our Story</span>
+        <h2 class="heading-lg">Where every cup starts a conversation.</h2>
+        <hr class="divider" />
+        <p class="body-lg">
+          At Tea Cartel, we believe great conversations begin with a great cup of tea.
+          What started as a simple idea — to create a warm, welcoming space for people
+          to connect, relax, and enjoy quality food — has grown into one of Jaipur's
+          favourite hangout spots.
+        </p>
+        <p class="body-lg" style="margin-top: 16px;">
+          Whether you're meeting friends, catching up on work, or simply taking a break
+          from a busy day, Tea Cartel offers the perfect blend of comfort, flavour, and
+          atmosphere. More than just a café — it's where memories are made.
+        </p>
+
+        <div class="about-features">
+          <div class="feature-row">
+            <div class="feature-icon">🌿</div>
+            <div class="feature-text">
+              <h4>Open-Air Ambience</h4>
+              <p>Escape the crowded indoors and breathe easy in our refreshing open space.</p>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">☕</div>
+            <div class="feature-text">
+              <h4>Handcrafted Brews & Great Food</h4>
+              <p>Every item prepared fresh — to bring people together over great taste.</p>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">📸</div>
+            <div class="feature-text">
+              <h4>Aesthetic & Relaxed Vibes</h4>
+              <p>Cozy seating, natural surroundings, and the perfect Instagram backdrop.</p>
+            </div>
+          </div>
+          <div class="feature-row">
+            <div class="feature-icon">❤️</div>
+            <div class="feature-text">
+              <h4>Where People Connect</h4>
+              <p>Good food, great company, and lasting memories — all in one place.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MENU
+═══════════════════════════════════════════ -->
+<section class="section section--card" id="menu">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">What We Serve</span>
+      <h2 class="heading-lg">Made with care.<br>Served with love.</h2>
+      <hr class="divider" />
+      <p class="body-lg">From comforting teas to signature bites — every item on our menu is designed to delight.</p>
+    </div>
+
+    <div class="menu-tabs reveal">
+      <button class="tab-btn active" onclick="filterMenu('all', this)">All</button>
+      <button class="tab-btn" onclick="filterMenu('tea', this)">Hot Tea</button>
+      <button class="tab-btn" onclick="filterMenu('drinks', this)">Cold Drinks</button>
+      <button class="tab-btn" onclick="filterMenu('burger', this)">Burgers</button>
+      <button class="tab-btn" onclick="filterMenu('momos', this)">Momos</button>
+      <button class="tab-btn" onclick="filterMenu('chinese', this)">Chinese</button>
+      <button class="tab-btn" onclick="filterMenu('soup', this)">Soups</button>
+    </div>
+
+    <div class="menu-grid" id="menuGrid">
+
+      <!-- FEATURED: Cold Coffee -->
+      <div class="menu-card menu-card--featured reveal" data-cat="drinks">
+        <div class="star-badge">⭐ Fan Favourite</div>
+        <div class="menu-card-icon">🧊</div>
+        <div class="menu-card-tag">Signature Drink</div>
+        <h3>Cold Coffee</h3>
+        <p>Rich, creamy, and deeply satisfying — our cold coffee is what legends are made of. Add extra ice for ₹20.</p>
+        <div class="menu-card-price">₹110 <span>— ₹180</span></div>
+      </div>
+
+      <!-- Kulhad Chai -->
+      <div class="menu-card reveal reveal-delay-1" data-cat="tea">
+        <div class="menu-card-icon">🏺</div>
+        <div class="menu-card-tag">Hot Tea</div>
+        <h3>Kulhad Chai</h3>
+        <p>Served in an earthen kulhad — warm, aromatic, and authentically desi. A timeless classic.</p>
+        <div class="menu-card-price">₹35</div>
+      </div>
+
+      <!-- Tulsi Adrak -->
+      <div class="menu-card reveal reveal-delay-2" data-cat="tea">
+        <div class="menu-card-icon">🌱</div>
+        <div class="menu-card-tag">Hot Tea</div>
+        <h3>Tulsi Adrak Chai</h3>
+        <p>The healing brew — fresh tulsi and ginger blended into a soothing cup that warms the soul.</p>
+        <div class="menu-card-price">₹25</div>
+      </div>
+
+      <!-- Special Burger -->
+      <div class="menu-card reveal reveal-delay-1" data-cat="burger">
+        <div class="menu-card-icon">🍔</div>
+        <div class="menu-card-tag">Burgers</div>
+        <h3>Special Burger</h3>
+        <p>Our chef's signature creation — loaded with layers of flavour that make it anything but ordinary.</p>
+        <div class="menu-card-price">₹160</div>
+      </div>
+
+      <!-- Cappuccino -->
+      <div class="menu-card reveal reveal-delay-2" data-cat="tea">
+        <div class="menu-card-icon">☕</div>
+        <div class="menu-card-tag">Hot Coffee</div>
+        <h3>Cappuccino</h3>
+        <p>Perfectly frothed, smooth, and indulgent. The café classic that never disappoints.</p>
+        <div class="menu-card-price">₹99</div>
+      </div>
+
+      <!-- Veg Tandoori Momos -->
+      <div class="menu-card reveal reveal-delay-3" data-cat="momos">
+        <div class="menu-card-icon">🥟</div>
+        <div class="menu-card-tag">Momos</div>
+        <h3>Veg Tandoori Momos</h3>
+        <p>Smoky, spiced, and absolutely addictive — our tandoori momos are a crowd-puller every single time.</p>
+        <div class="menu-card-price">₹240 <span>8 pcs</span></div>
+      </div>
+
+      <!-- Paneer Chowmeen -->
+      <div class="menu-card reveal reveal-delay-1" data-cat="chinese">
+        <div class="menu-card-icon">🍜</div>
+        <div class="menu-card-tag">Chinese</div>
+        <h3>Paneer Chowmeen</h3>
+        <p>Wok-tossed noodles with soft paneer cubes, fresh veggies, and bold Indo-Chinese flavours.</p>
+        <div class="menu-card-price">₹190</div>
+      </div>
+
+      <!-- Manchow Soup -->
+      <div class="menu-card reveal reveal-delay-2" data-cat="soup">
+        <div class="menu-card-icon">🍲</div>
+        <div class="menu-card-tag">Soups</div>
+        <h3>Manchow Soup</h3>
+        <p>A deeply satisfying, tangy and spicy broth topped with crispy noodles. Perfect for cool evenings.</p>
+        <div class="menu-card-price">₹99</div>
+      </div>
+
+      <!-- Cheese Burger -->
+      <div class="menu-card reveal reveal-delay-3" data-cat="burger">
+        <div class="menu-card-icon">🧀</div>
+        <div class="menu-card-tag">Burgers</div>
+        <h3>Cheese Burger</h3>
+        <p>Melty cheese, crispy patty, fresh greens — simple pleasures done perfectly right.</p>
+        <div class="menu-card-price">₹110</div>
+      </div>
+
+    </div>
+
+    <div class="menu-cta-bar reveal">
+      <div>
+        <p>Explore our full menu</p>
+        <small>Hot teas, cold drinks, burgers, momos, Chinese, soups & more.</small>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="https://www.zomato.com/jaipur/tea-cartel-jagatpura" target="_blank" class="btn btn--primary">View Full Menu on Zomato</a>
+        <a href="https://www.swiggy.com/restaurants/1157814/dineout/menu" target="_blank" class="btn btn--outline">View on Swiggy</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     GALLERY
+═══════════════════════════════════════════ -->
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">Gallery</span>
+      <h2 class="heading-lg">Feel the vibe before you arrive.</h2>
+      <hr class="divider" />
+      <p class="body-lg">Open-air seating, cozy corners, and an atmosphere that makes every visit unforgettable.</p>
+    </div>
+
+    <div class="gallery-grid reveal">
+      <div class="gallery-cell">
+        <div class="gallery-placeholder">
+          <div class="g-icon">🌿</div>
+          <p>Open-air seating area<br><em>Replace with your outdoor photo</em></p>
+        </div>
+        <div class="gallery-caption">Open-air ambience at Tea Cartel</div>
+      </div>
+      <div class="gallery-cell">
+        <div class="gallery-placeholder">
+          <div class="g-icon">☕</div>
+          <p>Signature brews<br><em>Place a drink photo here</em></p>
+        </div>
+        <div class="gallery-caption">Handcrafted cold coffee</div>
+      </div>
+      <div class="gallery-cell">
+        <div class="gallery-placeholder">
+          <div class="g-icon">🏺</div>
+          <p>Kulhad Chai<br><em>Place a chai photo here</em></p>
+        </div>
+        <div class="gallery-caption">Authentic kulhad chai</div>
+      </div>
+      <div class="gallery-cell">
+        <div class="gallery-placeholder">
+          <div class="g-icon">🥟</div>
+          <p>Tandoori Momos<br><em>Place a food photo here</em></p>
+        </div>
+        <div class="gallery-caption">Smoky tandoori momos</div>
+      </div>
+      <div class="gallery-cell">
+        <div class="gallery-placeholder">
+          <div class="g-icon">🌆</div>
+          <p>Evening ambience<br><em>Place an evening photo here</em></p>
+        </div>
+        <div class="gallery-caption">Golden hour at Tea Cartel</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     REVIEWS
+═══════════════════════════════════════════ -->
+<section class="section section--dark" id="reviews">
+  <div class="container">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:24px; margin-bottom:16px;">
+      <div class="reveal">
+        <span class="eyebrow">What People Say</span>
+        <h2 class="heading-lg" style="color:var(--cream);">Loved by Jaipur.<br>Shared on Instagram.</h2>
+      </div>
+      <div class="rating-summary reveal">
+        <div>
+          <div class="big-rating">4.5</div>
+          <div style="color:var(--amber-light); font-size:18px; margin-top:4px;">★★★★½</div>
+          <div class="big-rating-sub">Average rating across platforms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Hands down the best chai I've had in Jaipur. The kulhad gives it such an authentic feel. The open-air seating is a game-changer — perfect for evenings with friends."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:var(--amber);">P</div>
+          <div>
+            <div class="review-name">Priya S.</div>
+            <div class="review-meta">Zomato Review · Jagatpura</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal reveal-delay-1">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The cold coffee here is unreal — thick, creamy, and properly chilled. We come at least twice a week. The tandoori momos are an absolute must-try!"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#E8A85A;">R</div>
+          <div>
+            <div class="review-name">Rohit M.</div>
+            <div class="review-meta">Swiggy Review · Regular Customer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal reveal-delay-2">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Tea Cartel is my go-to study spot. Great WiFi vibes, amazing cappuccino, and a really relaxed atmosphere. Nobody rushes you out. Feels like a second home."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:var(--sage);">A</div>
+          <div>
+            <div class="review-name">Aisha K.</div>
+            <div class="review-meta">Instagram Review · Student</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Came here for a date night and we ended up staying 3 hours. The ambience is beautiful, food is great value, and the service is warm and genuine. Highly recommended!"</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#CB6030;">V</div>
+          <div>
+            <div class="review-name">Vikas & Neha</div>
+            <div class="review-meta">Google Review · Jaipur</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal reveal-delay-1">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"The burger menu surprised me — the Special Burger is properly loaded. Add a cold coffee and you've got the perfect combo. Great outdoor seating makes it even better."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#6B7B60;">S</div>
+          <div>
+            <div class="review-name">Shreya T.</div>
+            <div class="review-meta">Zomato Review · Food Blogger</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card reveal reveal-delay-2">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Tulsi Adrak Chai in the morning here is my ritual. The staff is so friendly, portions are generous, and the prices are incredibly reasonable. Pure joy."</p>
+        <div class="review-author">
+          <div class="review-avatar" style="background:#C8873A;">M</div>
+          <div>
+            <div class="review-name">Mehak J.</div>
+            <div class="review-meta">Instagram DM · Local Resident</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     ORDER ONLINE
+═══════════════════════════════════════════ -->
+<section class="section" id="order">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">Order Online</span>
+      <h2 class="heading-lg">Tea Cartel,<br>delivered to you.</h2>
+      <hr class="divider" />
+      <p class="body-lg">Can't make it in? We come to you. Order on Zomato or Swiggy and get your favourites delivered fresh.</p>
+    </div>
+
+    <div class="order-cards">
+      <a href="https://www.zomato.com/jaipur/tea-cartel-jagatpura" target="_blank" rel="noopener" class="order-card order-card--zomato reveal">
+        <div class="order-card-logo">🍽️</div>
+        <h3>Zomato</h3>
+        <p>Browse our full menu, read reviews, and get fast delivery — all on Zomato.</p>
+        <span class="btn">Order on Zomato →</span>
+      </a>
+      <a href="https://www.swiggy.com/restaurants/1157814/dineout/menu" target="_blank" rel="noopener" class="order-card order-card--swiggy reveal reveal-delay-1">
+        <div class="order-card-logo">🛵</div>
+        <h3>Swiggy</h3>
+        <p>Quick delivery straight to your door. Find Tea Cartel on Swiggy right now.</p>
+        <span class="btn">Order on Swiggy →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     VISIT US
+═══════════════════════════════════════════ -->
+<section class="section section--card" id="visit">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">Find Us</span>
+      <h2 class="heading-lg">Come say hello.</h2>
+      <hr class="divider" />
+      <p class="body-lg">We're easy to find in Jagatpura, Jaipur. Look for the cozy open-air café with the best chai in town.</p>
+    </div>
+
+    <div class="visit-grid">
+      <div class="map-frame reveal">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d75.83213590673253!3d26.820637246721603!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDQ5JzE0LjMiTiA3NcKwNDknNTcuNyJF!5e0!3m2!1sen!2sin!4v1234567890"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Tea Cartel Location Map">
+        </iframe>
+      </div>
+
+      <div class="info-blocks reveal reveal-delay-1">
+        <div class="info-block">
+          <h4>📍 Address</h4>
+          <p>Tea Cartel<br>Jagatpura, Jaipur<br>Rajasthan, India</p>
+          <a href="https://maps.google.com/?q=26.820637246721603,75.83213590673253" target="_blank" style="color:var(--amber); font-size:14px; font-weight:500; display:inline-block; margin-top:8px;">Get Directions →</a>
+        </div>
+
+        <div class="info-block">
+          <h4>📞 Contact</h4>
+          <a href="tel:+919530383938" style="font-size:20px; font-weight:600; font-family:var(--ff-display);">+91 95303 83938</a>
+          <p style="font-size:13px; color:var(--muted); margin-top:6px;">Call or WhatsApp for reservations & inquiries</p>
+        </div>
+
+        <div class="info-block">
+          <h4>🕙 Opening Hours</h4>
+          <div class="open-now">● Open Now</div>
+          <div class="hours-row"><span class="day">Monday – Sunday</span><span class="time">10:00 AM – 12:00 AM</span></div>
+          <div class="hours-row"><span class="day">Public Holidays</span><span class="time">10:00 AM – 12:00 AM</span></div>
+          <p style="font-size:12px; color:var(--muted); margin-top:10px;">We're open every day of the year.</p>
+        </div>
+
+        <div class="info-block">
+          <h4>🔗 Follow Us</h4>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:4px;">
+            <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="btn btn--outline" style="padding:10px 18px; font-size:13px;">📸 Instagram</a>
+            <a href="https://www.zomato.com/jaipur/tea-cartel-jagatpura" target="_blank" class="btn btn--outline" style="padding:10px 18px; font-size:13px;">🍽️ Zomato</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     INSTAGRAM
+═══════════════════════════════════════════ -->
+<section class="section" id="instagram">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">@_tea_cartel</span>
+      <h2 class="heading-lg">We're on Instagram.</h2>
+      <hr class="divider" />
+      <p class="body-lg">Aesthetic vibes, daily specials, and a whole lot of chai. Follow along for your daily dose of Tea Cartel.</p>
+    </div>
+
+    <div class="insta-grid reveal">
+      <!-- 10 placeholder tiles representing an IG feed -->
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="Tea photos on Instagram">
+        <div class="insta-icon">📸</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="Ambience shots">
+        <div class="insta-icon">🌿</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="Food photos">
+        <div class="insta-icon">🍔</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="Drinks photos">
+        <div class="insta-icon">☕</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="More cafe content">
+        <div class="insta-icon">✨</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="More content">
+        <div class="insta-icon">🥟</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="More content">
+        <div class="insta-icon">🏺</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="More content">
+        <div class="insta-icon">🌅</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="More content">
+        <div class="insta-icon">🍜</div>
+        <div class="insta-overlay"></div>
+      </a>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="insta-cell" title="More content">
+        <div class="insta-icon">🧊</div>
+        <div class="insta-overlay"></div>
+      </a>
+    </div>
+
+    <div class="insta-cta-bar reveal">
+      <p class="insta-handle">@_tea_cartel</p>
+      <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="btn btn--primary">Follow on Instagram</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════ -->
+<section class="section section--card" id="faq">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="heading-lg">Got questions? We've got answers.</h2>
+      <hr class="divider" />
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Where is Tea Cartel located?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">We're located in Jagatpura, Jaipur, Rajasthan. You can get directions via Google Maps or call us at +91 95303 83938 for help finding us.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What are your opening hours?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">We're open every day from 10:00 AM to 12:00 AM (midnight), including weekends and public holidays. Come for chai in the morning or wind down with us in the evening.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do you offer home delivery?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Yes! You can order from us on Zomato and Swiggy for home delivery. Just search "Tea Cartel Jagatpura" or use the Order Online section on this page.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is the seating open-air? Is it suitable for evenings?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Yes! Tea Cartel has a beautiful open-air ambience that's especially lovely in the evenings. The relaxed outdoor setting is perfect for conversations, casual hangouts, and golden-hour moments.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Do you serve non-vegetarian food?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Our current menu is entirely vegetarian, featuring a wide range of teas, cold coffees, burgers, momos, Chinese dishes, and soups — all made fresh. We're proud to cater to every palate.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Can I reserve a table for a group or special occasion?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Absolutely! Call us at +91 95303 83938 or drop us a message on Instagram @_tea_cartel to arrange for a group visit or celebration. We love making memories happen.</div>
+      </div>
+
+      <div class="faq-item reveal">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What's your most popular item?
+          <div class="faq-icon">+</div>
+        </div>
+        <div class="faq-a">Without a doubt, our Cold Coffee and Kulhad Chai are the crowd favourites! The Tandoori Momos and Special Burger also have a massive fanbase. We recommend trying them all!</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Tea Cartel</div>
+        <div class="footer-brand-tag">Sip. Chill. Repeat.</div>
+        <p class="footer-brand-desc">Jaipur's favourite open-air café serving handcrafted teas, cold coffees, momos, burgers, and a whole lot of warmth. Come for the chai. Stay for the vibes.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Menu</h5>
+        <ul class="footer-links">
+          <li><a href="#menu">Hot Tea & Coffee</a></li>
+          <li><a href="#menu">Cold Drinks</a></li>
+          <li><a href="#menu">Burgers</a></li>
+          <li><a href="#menu">Momos</a></li>
+          <li><a href="#menu">Chinese</a></li>
+          <li><a href="#menu">Soups</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Order Online</h5>
+        <ul class="footer-links">
+          <li><a href="https://www.zomato.com/jaipur/tea-cartel-jagatpura" target="_blank">Zomato</a></li>
+          <li><a href="https://www.swiggy.com/restaurants/1157814/dineout/menu" target="_blank">Swiggy</a></li>
+        </ul>
+        <h5 style="margin-top:24px;">Follow Us</h5>
+        <ul class="footer-links">
+          <li><a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank">Instagram</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Visit Us</h5>
+        <ul class="footer-links">
+          <li><a>Jagatpura, Jaipur</a></li>
+          <li><a>Rajasthan, India</a></li>
+          <li><a href="tel:+919530383938">+91 95303 83938</a></li>
+          <li><a>10:00 AM – 12:00 AM</a></li>
+          <li><a>Open Every Day</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 Tea Cartel, Jaipur. All rights reserved.</span>
+      <div class="social-links">
+        <a href="https://www.instagram.com/_tea_cartel/?utm_source=ig_web_button_share_sheet" target="_blank" class="social-link" title="Instagram">📸</a>
+        <a href="https://www.zomato.com/jaipur/tea-cartel-jagatpura" target="_blank" class="social-link" title="Zomato">🍽️</a>
+        <a href="https://www.swiggy.com/restaurants/1157814/dineout/menu" target="_blank" class="social-link" title="Swiggy">🛵</a>
+        <a href="tel:+919530383938" class="social-link" title="Call Us">📞</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════ -->
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Menu filter
+  function filterMenu(cat, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#menuGrid .menu-card').forEach(card => {
+      const show = cat === 'all' || card.dataset.cat === cat;
+      card.style.display = show ? '' : 'none';
+    });
+  }
+
+  // FAQ accordion
+  function toggleFaq(el) {
+    const item = el.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+
+</body>
+</html>
